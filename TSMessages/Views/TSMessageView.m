@@ -13,6 +13,7 @@
 
 
 #define TSMessageViewPadding 15.0
+#define TSMessageImagePadding 20.0
 
 #define TSDesignFileName @"TSMessagesDefaultDesign.json"
 
@@ -70,7 +71,6 @@ static NSMutableDictionary *_notificationDesign;
                                                                                       options:kNilOptions
                                                                                         error:nil]];
     }
-    
     return _notificationDesign;
 }
 
@@ -170,10 +170,12 @@ static NSMutableDictionary *_notificationDesign;
         UIColor *fontColor = [UIColor colorWithHexString:[current valueForKey:@"textColor"]
                                                    alpha:1.0];
         
-        
-        self.textSpaceLeft = 2 * TSMessageViewPadding;
-        if (image) self.textSpaceLeft += image.size.width + 2 * TSMessageViewPadding;
-        
+        if (image) {
+            self.textSpaceLeft = image.size.width + 2 * TSMessageImagePadding;
+        } else {
+            self.textSpaceLeft = 2 * TSMessageViewPadding;
+        }
+
         // Set up title label
         _titleLabel = [[UILabel alloc] init];
         [self.titleLabel setText:title];
@@ -224,7 +226,7 @@ static NSMutableDictionary *_notificationDesign;
         if (image)
         {
             _iconImageView = [[UIImageView alloc] initWithImage:image];
-            self.iconImageView.frame = CGRectMake(TSMessageViewPadding * 2,
+            self.iconImageView.frame = CGRectMake(TSMessageImagePadding,
                                                   TSMessageViewPadding,
                                                   image.size.width,
                                                   image.size.height);
