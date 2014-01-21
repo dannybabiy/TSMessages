@@ -18,9 +18,9 @@
 @implementation TSBlurView
 
 
-- (UIToolbar *)toolbar
-{
-    if (_toolbar == nil) {
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
         _toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
         _toolbar.userInteractionEnabled = NO;
         _toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -29,23 +29,24 @@
 #endif
         [self addSubview:_toolbar];
     }
-
-    return _toolbar;
+    return self;
 }
 
-- (void)setBlurTintColor:(UIColor *)blurTintColor
-{
-    if ([self.toolbar respondsToSelector:@selector(setBarTintColor:)]) {
-        [self.toolbar performSelector:@selector(setBarTintColor:) withObject:blurTintColor];
-    }
-}
+// TODO: Fix me, setting a tint kills the blur.
 
-- (UIColor *)blurTintColor
-{
-    if ([self.toolbar respondsToSelector:@selector(barTintColor)]) {
-        return [self.toolbar performSelector:@selector(barTintColor)];
-    }
-    return nil;
-}
+//- (void)setBlurTintColor:(UIColor *)blurTintColor
+//{
+//    if ([self.toolbar respondsToSelector:@selector(setBarTintColor:)]) {
+//        [self.toolbar performSelector:@selector(setBarTintColor:) withObject:blurTintColor];
+//    }
+//}
+//
+//- (UIColor *)blurTintColor
+//{
+//    if ([self.toolbar respondsToSelector:@selector(barTintColor)]) {
+//        return [self.toolbar performSelector:@selector(barTintColor)];
+//    }
+//    return nil;
+//}
 
 @end
