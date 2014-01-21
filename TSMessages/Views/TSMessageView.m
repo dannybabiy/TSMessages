@@ -143,7 +143,7 @@ static NSMutableDictionary *_notificationDesign;
         current = [notificationDesign valueForKey:currentString];
 
         
-        if (!image && [current valueForKey:@"imageName"])
+        if (!image && [current valueForKey:@"imageName"] && ![[current valueForKey:@"imageName"] isEqualToString:@""])
         {
             image = [UIImage imageNamed:[current valueForKey:@"imageName"]];
         }
