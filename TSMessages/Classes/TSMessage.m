@@ -25,7 +25,9 @@
 
 @end
 
-@implementation TSMessage
+@implementation TSMessage {
+    UIWindow *notificationWindow;
+}
 
 static TSMessage *sharedMessages;
 static BOOL notificationActive;
@@ -192,12 +194,23 @@ __weak static UIViewController *_defaultViewController;
             }
         }
     }
-    else
+    else if (currentView.viewController)
     {
         [currentView.viewController.view addSubview:currentView];
         if ([TSMessage iOS7StyleEnabled]) {
             addStatusBarHeightToVerticalOffset();
         }
+    } else {
+        // Overlap the status bar.
+        // Size the window to that of the view, so that it doesn't intercept touches of the entire screen.
+        // TODO: Handle bottom possition.
+        notificationWindow = [[UIWindow alloc] initWithFrame:currentView.bounds];
+        notificationWindow.backgroundColor = [UIColor clearColor];
+        notificationWindow.userInteractionEnabled = YES;
+        notificationWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        notificationWindow.windowLevel = UIWindowLevelStatusBar;
+        notificationWindow.rootViewController = [[UIViewController alloc] init];;
+        [notificationWindow.rootViewController.view addSubview:currentView];
     }
     
     CGPoint toPoint;
@@ -221,6 +234,7 @@ __weak static UIViewController *_defaultViewController;
     }
 
     dispatch_block_t animationBlock = ^{
+        notificationWindow.hidden = NO;
         currentView.center = toPoint;
         if (![TSMessage iOS7StyleEnabled]) {
             currentView.alpha = TSMessageViewAlpha;
@@ -290,6 +304,8 @@ __weak static UIViewController *_defaultViewController;
          }
      } completion:^(BOOL finished)
      {
+         notificationWindow.hidden = YES;
+         notificationWindow = nil;
          [currentView removeFromSuperview];
          
          if ([self.messages count] > 0)

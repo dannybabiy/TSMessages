@@ -109,8 +109,8 @@ static NSMutableDictionary *_notificationDesign;
         _messagePosition = position;
         self.callback = callback;
         self.buttonCallback = buttonCallback;
-        
-        CGFloat screenWidth = self.viewController.view.bounds.size.width;
+
+        CGFloat screenWidth = viewController ? self.viewController.view.bounds.size.width : [UIScreen mainScreen].bounds.size.width;
         NSDictionary *current;
         NSString *currentString;
         switch (notificationType)
@@ -299,7 +299,7 @@ static NSMutableDictionary *_notificationDesign;
         
         if (self.messagePosition == TSMessageNotificationPositionBottom)
         {
-            topPosition = self.viewController.view.bounds.size.height;
+            topPosition = self.viewController ? self.viewController.view.bounds.size.height : [UIScreen mainScreen].bounds.size.height;
         }
         
         self.frame = CGRectMake(0.0, topPosition, screenWidth, actualHeight);
@@ -340,7 +340,7 @@ static NSMutableDictionary *_notificationDesign;
 - (CGFloat)updateHeightOfMessageView
 {
     CGFloat currentHeight;
-    CGFloat screenWidth = self.viewController.view.bounds.size.width;
+    CGFloat screenWidth = self.viewController ? self.viewController.view.bounds.size.width : [UIScreen mainScreen].bounds.size.width;
     
     
     self.titleLabel.frame = CGRectMake(self.textSpaceLeft,
@@ -419,16 +419,17 @@ static NSMutableDictionary *_notificationDesign;
         if (self.messagePosition == TSMessageNotificationPositionTop)
         {
             float topOffset = 0.f;
-
-            UINavigationController *navigationController = self.viewController.navigationController;
-            if (!navigationController && [self.viewController isKindOfClass:[UINavigationController class]]) {
-                navigationController = (UINavigationController *)self.viewController;
-            }
-            BOOL isNavBarIsHidden = !navigationController || self.viewController.navigationController.navigationBarHidden;
-            BOOL isNavBarIsOpaque = !self.viewController.navigationController.navigationBar.isTranslucent && self.viewController.navigationController.navigationBar.alpha == 1;
+            if (self.viewController) {
+                UINavigationController *navigationController = self.viewController.navigationController;
+                if (!navigationController && [self.viewController isKindOfClass:[UINavigationController class]]) {
+                    navigationController = (UINavigationController *)self.viewController;
+                }
+                BOOL isNavBarIsHidden = !navigationController || self.viewController.navigationController.navigationBarHidden;
+                BOOL isNavBarIsOpaque = !self.viewController.navigationController.navigationBar.isTranslucent && self.viewController.navigationController.navigationBar.alpha == 1;
             
-            if (isNavBarIsHidden || isNavBarIsOpaque) {
-                topOffset = -30.f;
+                if (isNavBarIsHidden || isNavBarIsOpaque) {
+                    topOffset = -30.f;
+                }
             }
             backgroundFrame = UIEdgeInsetsInsetRect(backgroundFrame, UIEdgeInsetsMake(topOffset, 0.f, 0.f, 0.f));
         }
