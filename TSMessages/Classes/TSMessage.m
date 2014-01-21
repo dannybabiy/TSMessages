@@ -57,6 +57,16 @@ __weak static UIViewController *_defaultViewController;
                                type:type];
 }
 
++ (void)showNotificationAboveStatusWithTitle:(NSString *)title
+                                    subtitle:(NSString *)subtitle
+                                        type:(TSMessageNotificationType)type
+{
+    [self showNotificationInViewController:nil
+                                     title:title
+                                  subtitle:subtitle
+                                      type:type];
+}
+
 + (void)showNotificationWithTitle:(NSString *)title
                          subtitle:(NSString *)subtitle
                              type:(TSMessageNotificationType)type
@@ -211,6 +221,7 @@ __weak static UIViewController *_defaultViewController;
         notificationWindow.windowLevel = UIWindowLevelStatusBar;
         notificationWindow.rootViewController = [[UIViewController alloc] init];;
         [notificationWindow.rootViewController.view addSubview:currentView];
+        notificationWindow.hidden = NO;
     }
     
     CGPoint toPoint;
@@ -234,7 +245,6 @@ __weak static UIViewController *_defaultViewController;
     }
 
     dispatch_block_t animationBlock = ^{
-        notificationWindow.hidden = NO;
         currentView.center = toPoint;
         if (![TSMessage iOS7StyleEnabled]) {
             currentView.alpha = TSMessageViewAlpha;

@@ -71,6 +71,15 @@ typedef NS_ENUM(NSInteger,TSMessageNotificationDuration) {
                          subtitle:(NSString *)subtitle
                              type:(TSMessageNotificationType)type;
 
+/** Shows a notification message above the status bar
+ @param title The title of the notification view
+ @param subtitle The text that is displayed underneath the title
+ @param type The notification type (Message, Warning, Error, Success)
+ */
++ (void)showNotificationAboveStatusWithTitle:(NSString *)title
+                                    subtitle:(NSString *)subtitle
+                                        type:(TSMessageNotificationType)type;
+
 /** Shows a notification message in a specific view controller
  @param viewController The view controller to show the notification in.
  You can use +setDefaultViewController: to set the the default one instead
